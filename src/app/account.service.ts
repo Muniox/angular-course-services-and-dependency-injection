@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import {EventEmitter, Injectable} from "@angular/core";
 import {LoggingService} from "./logging.service";
 
 export interface Account  {
@@ -7,7 +7,15 @@ export interface Account  {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root" // dzięki temu nie musimy podawać serwisu w ngModule w providers
+  /**
+   * The "new syntax" does offer one advantage though:
+   * Services can be loaded lazily by Angular (behind the scenes)
+   * and redundant code can be removed automatically.
+   * This can lead to a better performance and loading speed -
+   * though this really only kicks in for bigger services and apps in general.
+   *
+   * */
 })
 export class AccountService {
   accounts: Account[] = [
@@ -24,6 +32,8 @@ export class AccountService {
       status: 'unknown'
     }
   ];
+
+  statusUpdated = new EventEmitter<string>();
 
   constructor(private loggingService: LoggingService) {}
 

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from "rxjs";
 
 import {LoggingService} from "../logging.service";
 import {AccountService} from "../account.service";
+
 
 @Component({
   selector: 'app-new-account',
@@ -9,14 +11,28 @@ import {AccountService} from "../account.service";
   styleUrls: ['./new-account.component.css'],
   // providers: [LoggingService], // w ten sposób przekazujemy nową instancję klasy
 })
-export class NewAccountComponent {
+export class NewAccountComponent implements OnInit, OnDestroy{
+  subscription: Subscription
+
   constructor(
     private loggingService: LoggingService,
     private accountService: AccountService,
   ) {}
 
+  ngOnInit() {
+    const observable = this.accountService.statusUpdated
+    this.subscription = observable.subscribe(status => {
+      alert('New Status: ' + status);
+    })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   onCreateAccount(accountName: string, accountStatus: string) {
     this.accountService.addAccount(accountName, accountStatus);
     // this.loggingService.logStatusChange(accountStatus)
+
   }
 }
