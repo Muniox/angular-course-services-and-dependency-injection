@@ -6,7 +6,8 @@ import {AccountService} from "../account.service";
 @Component({
   selector: 'app-new-account',
   templateUrl: './new-account.component.html',
-  styleUrls: ['./new-account.component.css']
+  styleUrls: ['./new-account.component.css'],
+  providers: [LoggingService], // w ten sposób przekazujemy nową instancję klasy
 })
 export class NewAccountComponent {
   constructor(
